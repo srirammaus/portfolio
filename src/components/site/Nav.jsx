@@ -60,10 +60,7 @@ export default function Nav({ reduced, onToggleReduced, sceneOn, onToggleScene }
       >
         <div className="mx-auto flex h-16 w-full max-w-[1600px] items-center justify-between px-5 sm:px-8 lg:px-12">
           <Link to="/" className="group flex items-center gap-3" aria-label="Home">
-            <span className="relative flex h-6 w-6 items-center justify-center">
-              <span className="absolute inset-0 rotate-45 border border-cobalt/60 transition-transform duration-700 group-hover:rotate-[135deg]" />
-              <span className="h-1 w-1 rotate-45 bg-amethyst" />
-            </span>
+            <img src="/media/sriram-logo.png" alt="" className="h-10 w-10 object-contain transition-transform duration-500 group-hover:scale-110" />
             <span className="type-control text-silver">
               {identity.name}
             </span>

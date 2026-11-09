@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Image } from "@/components/ui/image";
 import { integrations } from "@/data/integrations";
-import { media } from "@/data/media";
 import SectionHeading from "@/components/site/SectionHeading";
 import Reveal from "@/components/site/Reveal";
+import NeutronStarScene from "@/components/site/NeutronStarScene";
 
 export default function IntegrationsSection() {
   const [selectedId, setSelectedId] = useState(integrations[0].id);
@@ -22,12 +21,8 @@ export default function IntegrationsSection() {
         <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7">
             <div className="relative aspect-[5/4] w-full overflow-hidden border border-line/70 bg-surface/40 sm:aspect-[16/11]">
-              <Image
-                src={media.integrations}
-                alt="Interwoven glowing threads representing connected systems"
-                className="absolute inset-0 h-full w-full object-cover opacity-30"
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-ink/70 via-ink/30 to-ink/80" />
+              <NeutronStarScene />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-ink/35 via-transparent to-ink/45" />
 
               <svg
                 className="absolute inset-0 h-full w-full"
@@ -44,8 +39,9 @@ export default function IntegrationsSection() {
                       y1="48"
                       x2={parseFloat(item.position.left)}
                       y2={parseFloat(item.position.top)}
-                      stroke={isActive ? "#2E5BFF" : "#2A2E3C"}
-                      strokeWidth={isActive ? 0.28 : 0.16}
+                      stroke={isActive ? "#f2c46d" : "#9b7a43"}
+                      strokeWidth={isActive ? 0.26 : 0.14}
+                      opacity={isActive ? 0.88 : 0.42}
                       strokeDasharray={isActive ? "0" : "1.4 1.4"}
                       vectorEffect="non-scaling-stroke"
                     />
@@ -55,9 +51,9 @@ export default function IntegrationsSection() {
 
               <div className="absolute left-1/2 top-[48%] -translate-x-1/2 -translate-y-1/2">
                 <div className="relative flex h-14 w-14 items-center justify-center">
-                  <span className="absolute inset-0 rotate-45 border border-cobalt/50" />
-                  <span className="absolute inset-2 rounded-full bg-cobalt/20 blur-md" />
-                  <span className="relative h-1.5 w-1.5 rounded-full bg-cobalt" />
+                  <span className="absolute inset-0 rounded-full border border-[#f2c46d]/60" />
+                  <span className="absolute inset-2 rounded-full bg-[#f2c46d]/30 blur-md" />
+                  <span className="relative h-2 w-2 rounded-full bg-[#ffe2a2] shadow-[0_0_16px_5px_rgba(242,196,109,0.7)]" />
                 </div>
                 <p className="mt-3 whitespace-nowrap text-center type-meta text-steel">
                   Application core
@@ -76,17 +72,17 @@ export default function IntegrationsSection() {
                   >
                     <span className="flex items-center gap-2">
                       <span
-                        className={`h-2 w-2 rotate-45 border transition-colors ${
+                        className={`h-2.5 w-2.5 shrink-0 rounded-full border transition-all ${
                           isActive
-                            ? "border-cobalt bg-cobalt"
-                            : "border-steel/60 bg-ink group-hover:border-cobalt"
+                            ? "border-[#fff0c8] bg-[#f2c46d] shadow-[0_0_12px_3px_rgba(242,196,109,0.65)]"
+                            : "border-[#e5bd72]/80 bg-[#c99543] group-hover:scale-125 group-hover:border-[#fff0c8] group-hover:bg-[#f2c46d]"
                         }`}
                       />
                       <span
                         className={`whitespace-nowrap border px-2 py-1 type-meta backdrop-blur-sm transition-colors ${
                           isActive
-                            ? "border-cobalt/60 bg-ink/90 text-white"
-                            : "border-line/80 bg-ink/70 text-steel group-hover:text-silver"
+                            ? "border-[#f2c46d]/60 bg-ink/90 text-white"
+                            : "border-line/80 bg-ink/75 text-steel group-hover:text-silver"
                         }`}
                       >
                         {item.label}
