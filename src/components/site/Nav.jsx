@@ -59,11 +59,8 @@ export default function Nav({ reduced, onToggleReduced, sceneOn, onToggleScene }
         )}
       >
         <div className="mx-auto flex h-16 w-full max-w-[1600px] items-center justify-between px-5 sm:px-8 lg:px-12">
-          <Link to="/" className="group flex items-center gap-3" aria-label="Home">
-            <img src="/media/sriram-logo.png" alt="" className="h-10 w-10 object-contain transition-transform duration-500 group-hover:scale-110" />
-            <span className="type-control text-silver">
-              {identity.name}
-            </span>
+          <Link to="/" className="type-control text-silver" aria-label="Home">
+            {identity.name}
           </Link>
 
           <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">

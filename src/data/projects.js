@@ -1,5 +1,3 @@
-import { media } from "@/data/media";
-
 /**
  * Personal projects. Only implemented scope is described; anything not yet
  * confirmed is intentionally left out rather than guessed.
@@ -11,7 +9,6 @@ export const personalProjects = [
     kind: "Personal project",
     category: "IoT · Environmental data · Conversational access",
     status: "In Progress",
-    image: media.cloudlink,
     summary:
       "An independent project exploring environmental sensor readings, weather APIs, backend data processing, and a Python chatbot.",
     description:
@@ -33,7 +30,6 @@ export const personalProjects = [
     kind: "Personal project",
     category: "AI · Retrieval · External integrations",
     status: "In Progress",
-    image: media.filly,
     summary:
       "An AI-focused platform exploring LLM workflows, retrieval-augmented generation, MCP integrations, and connections to external services.",
     description:

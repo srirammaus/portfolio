@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { Image } from "@/components/ui/image";
 import { personalProjects, professionalProjects } from "@/data/projects";
 import SectionHeading from "@/components/site/SectionHeading";
 import StatusBadge from "@/components/site/StatusBadge";
@@ -20,34 +19,19 @@ export default function ProjectsSection() {
           intro="Two tracks, kept clearly apart: what I build for myself, and the products I work on with a team."
         />
 
-        <div className="mt-16 space-y-16">
+        <div className="mt-16 space-y-6">
           {personalProjects.map((project, i) => (
             <Reveal key={project.id} delay={i * 0.06}>
               <button
                 onClick={() => setActive(project)}
-                className="group grid w-full grid-cols-1 gap-6 text-left lg:grid-cols-12 lg:items-center lg:gap-10"
+                className="group block w-full border border-line/70 bg-surface/20 p-6 text-left transition-colors hover:border-cobalt/40 hover:bg-surface/35 sm:p-8"
               >
-                <div
-                  className={`relative aspect-[16/10] w-full overflow-hidden border border-line/70 bg-surface lg:col-span-7 ${
-                    i % 2 === 1 ? "lg:order-2" : ""
-                  }`}
-                >
-                  <Image
-                    src={project.image}
-                    alt={`${project.name} — abstract visual`}
-                    className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
-                  <div className="absolute inset-x-0 top-0 flex items-start justify-between p-4">
-                    <StatusBadge status={project.status} />
-                    <span className="type-meta text-silver/70">
-                      {project.kind}
-                    </span>
-                  </div>
-                  <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-cobalt/10 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line/70 pb-4">
+                  <StatusBadge status={project.status} />
+                  <span className="type-meta text-silver/70">{project.kind}</span>
                 </div>
-
-                <div className="lg:col-span-5">
+                <div className="mt-7 grid grid-cols-1 gap-7 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,0.8fr)] lg:items-center lg:gap-12">
+                  <div>
                   <p className="eyebrow">{project.category}</p>
                   <h3 className="mt-4 font-display text-[clamp(1.7rem,3.2vw,2.6rem)] font-medium leading-tight tracking-[-0.035em] text-silver">
                     {project.name}
@@ -55,6 +39,8 @@ export default function ProjectsSection() {
                   <p className="mt-4 max-w-md text-base leading-relaxed text-steel">
                     {project.summary}
                   </p>
+                  </div>
+                  <div>
                   <ul className="mt-6 flex flex-wrap gap-2">
                     {project.focus.slice(0, 4).map((item) => (
                       <li
@@ -69,6 +55,7 @@ export default function ProjectsSection() {
                     View project
                     <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </span>
+                  </div>
                 </div>
               </button>
             </Reveal>
