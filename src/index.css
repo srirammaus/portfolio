@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2') format('woff2');
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 88.6%;
+    --card: 240 3% 5.5%;
+    --card-foreground: 0 0% 88.6%;
+    --popover: 240 3% 5.5%;
+    --popover-foreground: 0 0% 88.6%;
+    --primary: 227 100% 59%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 3% 9%;
+    --secondary-foreground: 0 0% 88.6%;
+    --muted: 240 3% 9%;
+    --muted-foreground: 0 0% 63%;
+    --accent: 240 4% 12%;
+    --accent-foreground: 0 0% 93%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 4% 15%;
+    --input: 240 4% 15%;
+    --ring: 227 100% 59%;
+    --radius: 0.25rem;
+
+    /* portfolio palette */
+    --ink: 0 0% 2%;
+    --surface: 240 3% 5.5%;
+    --silver: 36 14% 94%;
+    --steel: 225 8% 74%;
+    --cobalt: 227 100% 59%;
+    --amethyst: 254 100% 64%;
+    --line: 240 4% 14%;
+
+    --chart-1: 227 100% 59%;
+    --chart-2: 254 100% 64%;
+    --chart-3: 0 0% 63%;
+    --chart-4: 210 40% 40%;
+    --chart-5: 0 0% 40%;
+
+    --font-heading: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --sidebar-background: 240 3% 5%;
+    --sidebar-foreground: 0 0% 88.6%;
+    --sidebar-primary: 227 100% 59%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 4% 12%;
+    --sidebar-accent-foreground: 0 0% 93%;
+    --sidebar-border: 240 4% 15%;
+    --sidebar-ring: 227 100% 59%;
+  }
+
+  .dark {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 88.6%;
+    --card: 240 3% 5.5%;
+    --card-foreground: 0 0% 88.6%;
+    --popover: 240 3% 5.5%;
+    --popover-foreground: 0 0% 88.6%;
+    --primary: 227 100% 59%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 3% 9%;
+    --secondary-foreground: 0 0% 88.6%;
+    --muted: 240 3% 9%;
+    --muted-foreground: 0 0% 63%;
+    --accent: 240 4% 12%;
+    --accent-foreground: 0 0% 93%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 4% 15%;
+    --input: 240 4% 15%;
+    --ring: 227 100% 59%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-ink font-body text-silver antialiased;
+    margin: 0;
+  }
+
+  ::selection {
+    background: hsl(var(--cobalt) / 0.35);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--cobalt));
+    outline-offset: 3px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #050505;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1d1f28;
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2e3550;
+  }
+}
+
+@layer utilities {
+  .eyebrow {
+    @apply font-body text-xs font-semibold uppercase tracking-[0.09em] text-steel;
+  }
+
+  .type-meta {
+    @apply font-body text-xs font-medium leading-normal;
+  }
+
+  .type-control {
+    @apply font-body text-sm font-medium leading-snug;
+  }
+
+  .type-reading {
+    @apply text-lg leading-[1.65];
+  }
+
+  .hairline-t {
+    border-top: 1px solid hsl(var(--line));
+  }
+
+  .hairline-b {
+    border-bottom: 1px solid hsl(var(--line));
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, hsl(var(--line) / 0.7) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--line) / 0.7) 1px, transparent 1px);
+    background-size: 84px 84px;
+  }
+}
+
+/* fine film grain over the whole experience */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+html[data-motion="reduced"] {
+  scroll-behavior: auto;
+}
+
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+/* Keep decorative scene and hotspot layers within the viewport. */
+#root {
+  overflow-x: clip;
+}
