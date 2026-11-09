@@ -137,7 +137,7 @@ export function createWorld(container) {
   const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(haloCanvas),blending:THREE.AdditiveBlending,depthWrite:false}));
   halo.scale.setScalar(3.5);system.add(halo);
   const orbit=(r,a,out)=>out.set(r*Math.cos(a),r*.20*Math.sin(a),r*.84*Math.sin(a));
-  const planets=[[1.68,.17,2.7],[6.9,1.37,1.78],[3.65,.45,2.56],[5.1,.87,3.27],[7.55,.60,3.91]].map(([r,baseRadius,phase],i)=>{
+  const planets=[[1.68,.17,2.7],[6.9,.96,1.78],[3.65,.45,2.56],[5.1,.87,3.27],[7.55,.60,3.91]].map(([r,baseRadius,phase],i)=>{
     const size=baseRadius*.85;
     const path=line(Array.from({length:193},(_,j)=>orbit(r,j*Math.PI/96,new THREE.Vector3())),0xbf965f,.34,system);
     path.material.opacity=.52;
@@ -164,6 +164,9 @@ export function createWorld(container) {
   const velocities=Array.from({length:burstCount},()=>v(random()-.5,random()-.5,random()-.5).normalize().multiplyScalar(.45+random()*1.2));
   const burst=new THREE.Points(particles,new THREE.PointsMaterial({size:.06,color:0xffdfa6,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));
   burst.frustumCulled=false;burst.visible=false;scene.add(burst);
+  const blastAudio = new Audio("/media/planet-blast.mp3");
+  blastAudio.preload = "auto";
+  blastAudio.volume = 0.38;
   let blastTime=-4,active=-1;
   function launch(x,y,still=false,force=false){
     let index=-1;
@@ -189,6 +192,8 @@ export function createWorld(container) {
     active=index;visited.add(index);
     const item=planets[index];item.planet.getWorldPosition(burst.position);
     blastTime=elapsed;item.target+=1.05;
+    try { blastAudio.currentTime = 0; } catch {}
+    blastAudio.play().catch(() => {});
     if(still){item.offset=item.target;update(elapsed+.35,0,progress,cursor);}
     return destinations[index]+" · "+logs[index]+" "+visited.size+"/5 visited.";
   }

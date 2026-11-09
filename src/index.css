@@ -198,6 +198,13 @@ html[data-motion="reduced"] *::after {
   transition-duration: 0.001ms !important;
 }
 
+html[data-motion="reduced"] .whatsapp-cast,
+html[data-motion="reduced"] .whatsapp-cast * {
+  animation-duration: 1.05s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1.05s !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -206,4 +213,102 @@ html[data-motion="reduced"] *::after {
 /* Keep decorative scene and hotspot layers within the viewport. */
 #root {
   overflow-x: clip;
+}
+
+/* Brief, original cobalt-violet energy burst before opening the WhatsApp conversation. */
+.whatsapp-cast {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--cast-x) var(--cast-y), rgba(91, 78, 255, .24), transparent 18rem);
+  animation: whatsapp-cast-fade 1.05s ease-out both;
+}
+
+.whatsapp-cast__flash,
+.whatsapp-cast__halo,
+.whatsapp-cast__core,
+.whatsapp-cast__spark {
+  position: absolute;
+  left: var(--cast-x);
+  top: var(--cast-y);
+  transform: translate(-50%, -50%);
+}
+
+.whatsapp-cast__flash {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #f2efff;
+  box-shadow: 0 0 18px 10px rgba(157, 139, 255, .95), 0 0 80px 35px rgba(74, 89, 255, .72);
+  animation: whatsapp-cast-core 1.05s cubic-bezier(.12,.72,.18,1) both;
+}
+
+.whatsapp-cast__core {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(226, 220, 255, .92);
+  border-radius: 42% 58% 62% 38%;
+  box-shadow: 0 0 18px rgba(126, 100, 255, .95), inset 0 0 14px rgba(83, 114, 255, .82);
+  animation: whatsapp-cast-core 900ms ease-out both;
+}
+
+.whatsapp-cast__halo {
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(174, 157, 255, .94);
+  border-radius: 50%;
+  box-shadow: 0 0 16px rgba(109, 93, 255, .7);
+  animation: whatsapp-cast-ring 950ms cubic-bezier(.12,.72,.18,1) both;
+}
+
+.whatsapp-cast__halo--two {
+  border-color: rgba(214, 201, 255, .78);
+  animation-delay: 90ms;
+}
+
+.whatsapp-cast__spark {
+  width: 2px;
+  height: 40px;
+  border-radius: 99px;
+  background: linear-gradient(to top, transparent, #635dff 30%, #c28aff 58%, #f4efff 78%, transparent);
+  transform: translate(-50%, -50%) rotate(calc(var(--spark-index) * 20deg));
+  transform-origin: center;
+  animation: whatsapp-cast-spark 760ms cubic-bezier(.12,.72,.18,1) both;
+  animation-delay: calc(var(--spark-index) * 9ms);
+}
+
+@keyframes whatsapp-cast-fade {
+  0% { opacity: 0; }
+  14% { opacity: 1; }
+  75% { opacity: .82; }
+  100% { opacity: 0; }
+}
+
+@keyframes whatsapp-cast-ring {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.25) rotate(0deg); }
+  18% { opacity: .95; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(28) rotate(150deg); }
+}
+
+@keyframes whatsapp-cast-core {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.2) rotate(-25deg); }
+  22% { opacity: 1; }
+  68% { opacity: .9; transform: translate(-50%, -50%) scale(1.3) rotate(18deg); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(.25) rotate(50deg); }
+}
+
+@keyframes whatsapp-cast-spark {
+  0% { opacity: 0; height: 0; }
+  24% { opacity: 1; height: 52px; }
+  100% { opacity: 0; height: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-cast,
+  .whatsapp-cast * {
+    animation-duration: 1.05s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1.05s !important;
+  }
 }
