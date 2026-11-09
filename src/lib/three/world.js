@@ -9,7 +9,7 @@ export function createWorld(container) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.15 : 1.5));
   container.appendChild(renderer.domElement);
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x040710);
+  scene.background = new THREE.Color(0x010205);
   const camera = new THREE.PerspectiveCamera(43, 1, .1, 90);
   const system = new THREE.Group();
   scene.add(system);
@@ -23,9 +23,77 @@ export function createWorld(container) {
   }
   let seed = 841;
   function random() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-  const stars = Array.from({length:mobile?400:1100}, () => v((random()-.5)*54,(random()-.5)*30,-4-random()*24));
-  scene.add(new THREE.Points(new THREE.BufferGeometry().setFromPoints(stars),
-    new THREE.PointsMaterial({color:0xb3c8ff,size:.035,transparent:true,opacity:.78})));
+  const starCount = mobile ? 96 : 620;
+  const starPositions = new Float32Array(starCount * 3);
+  const starLevels = new Float32Array(starCount).fill(.14);
+  const starSizes = new Float32Array(starCount);
+  for (let i = 0; i < starCount; i += 1) {
+    starPositions[i * 3] = (random() - .5) * 54;
+    starPositions[i * 3 + 1] = (random() - .5) * 30;
+    starPositions[i * 3 + 2] = -4 - random() * 24;
+    starSizes[i] = (mobile ? .8 : .85) + random() * (mobile ? .7 : 1.1);
+  }
+  const starGeometry = new THREE.BufferGeometry();
+  starGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
+  const starLevelAttribute = new THREE.BufferAttribute(starLevels, 1);
+  starGeometry.setAttribute("aTwinkle", starLevelAttribute);
+  starGeometry.setAttribute("aSize", new THREE.BufferAttribute(starSizes, 1));
+  const flashStarts = new Float32Array(starCount).fill(-1);
+  const flashDurations = new Float32Array(starCount);
+  let nextFlashAt = 3 + random() * 2;
+  function updateStarTwinkles(time) {
+    if (time >= nextFlashAt) {
+      const count = 5 + Math.floor(random() * 2);
+      const picked = new Set();
+      while (picked.size < count) picked.add(Math.floor(random() * starCount));
+      picked.forEach((index) => {
+        flashStarts[index] = time + random() * .9;
+        flashDurations[index] = .28 + random() * .34;
+      });
+      nextFlashAt = time + 5 + random() * 5;
+    }
+    for (let i = 0; i < starCount; i += 1) {
+      const start = flashStarts[i];
+      if (start < 0 || time < start) {
+        starLevels[i] = .14;
+        continue;
+      }
+      const progress = (time - start) / flashDurations[i];
+      if (progress >= 1) {
+        flashStarts[i] = -1;
+        starLevels[i] = .14;
+      } else {
+        starLevels[i] = .14 + .86 * Math.sin(progress * Math.PI);
+      }
+    }
+    starLevelAttribute.needsUpdate = true;
+  }
+  const starMaterial = new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    vertexShader: `
+      attribute float aTwinkle;
+      attribute float aSize;
+      varying float vTwinkle;
+      void main() {
+        vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * viewPosition;
+        gl_PointSize = aSize * (30.0 / max(8.0, -viewPosition.z));
+        vTwinkle = aTwinkle;
+      }
+    `,
+    fragmentShader: `
+      varying float vTwinkle;
+      void main() {
+        float edge = 1.0 - smoothstep(0.18, 0.5, length(gl_PointCoord - 0.5));
+        vec3 color = mix(vec3(0.48, 0.65, 0.96), vec3(0.91, 0.96, 1.0), vTwinkle);
+        gl_FragColor = vec4(color, edge * vTwinkle * 0.78);
+      }
+    `,
+  });
+  const stars = new THREE.Points(starGeometry, starMaterial);
+  stars.frustumCulled = false;
+  scene.add(stars);
 
   // A translucent curtain whose luminous lower edge undulates independently of the camera.
   const aurora = new THREE.ShaderMaterial({
@@ -36,22 +104,22 @@ export function createWorld(container) {
     float dy=uv0.y-edge;float beam=exp(-abs(dy)*mix(65.,9.,step(0.,dy)));
     float folds=.48+.52*pow(.5+.5*sin(66.*x+4.*sin(21.*x)+time*.18),2.);
     vec3 hue=mix(vec3(.08,.90,.60),vec3(.51,.18,.94),.5+.5*sin(x*9.));
-    gl_FragColor=vec4(hue,beam*folds*.13*smoothstep(0.,.12,x)*smoothstep(0.,.12,1.-x));}`
+    gl_FragColor=vec4(hue,beam*folds*.075*smoothstep(0.,.12,x)*smoothstep(0.,.12,1.-x));}`
   });
   const curtain = new THREE.Mesh(new THREE.PlaneGeometry(39,14),aurora);
   curtain.position.set(1,1,-9);scene.add(curtain);
 
-  const nodes=Array.from({length:56},()=>v((random()-.5)*33,(random()-.5)*13,-3-random()*3));
+  const nodes=Array.from({length:mobile?28:56},()=>v((random()-.5)*33,(random()-.5)*13,-3-random()*3));
   const paths=[];
   nodes.forEach((a,i)=>{
-    const neighbors=nodes.slice(i+1).filter(b=>a.distanceTo(b)<4.5).slice(0,3);
+    const neighbors=nodes.slice(i+1).filter(b=>a.distanceTo(b)<4.5).slice(0,mobile?2:3);
     for(const b of neighbors){
       const path=new THREE.QuadraticBezierCurve3(a,a.clone().lerp(b,.5).add(v(0,.19,.1)),b);
-      line(path.getPoints(12),0x698cff,.10);paths.push(path);
+      line(path.getPoints(12),0x698cff,mobile?.055:.085);paths.push(path);
     }
   });
-  const pulses=Array.from({length:14},(_,i)=>{
-    const dot=new THREE.Mesh(new THREE.SphereGeometry(.037,8,6),new THREE.MeshBasicMaterial({color:0xa4ccff}));
+  const pulses=Array.from({length:mobile?5:10},(_,i)=>{
+    const dot=new THREE.Mesh(new THREE.SphereGeometry(mobile?.026:.032,8,6),new THREE.MeshBasicMaterial({color:0xa4ccff}));
     scene.add(dot);return {dot,path:paths[i*3%paths.length]};
   });
   scene.add(new THREE.HemisphereLight(0xdceaff,0x212334,.46));
@@ -136,7 +204,7 @@ export function createWorld(container) {
     sunLight.intensity=130*system.scale.x**2;
     system.position.set(portrait?width*.42:width*.93,portrait?.35-p*.35:.9-p*.95,-1.2);
     system.rotation.set(-.40+p*.08-pointer.y*.25,-.36+pointer.x*.35,.16);
-    aurora.uniforms.time.value=t;sun.rotation.y=t*.12;
+    aurora.uniforms.time.value=t;updateStarTwinkles(t);sun.rotation.y=t*.12;
     halo.scale.setScalar(5.6+.18*Math.sin(t*1.6));
     planets.forEach((item,i)=>{
       const {r,phase,planet,path}=item;
@@ -162,7 +230,11 @@ export function createWorld(container) {
     renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();update(elapsed,0,progress,cursor);
   }
   resize();
-  return {launch,update,resize,dispose(){
+  function updateStars(time) {
+    updateStarTwinkles(time);
+    renderer.render(scene,camera);
+  }
+  return {launch,update,updateStars,resize,dispose(){
 
     scene.traverse(o=>{o.geometry?.dispose();o.material?.map?.dispose();o.material?.dispose();});
     renderer.dispose();renderer.domElement.remove();

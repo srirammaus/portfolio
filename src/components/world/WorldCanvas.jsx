@@ -94,6 +94,10 @@ export default function WorldCanvas({ reducedMotion = false }) {
       if (document.hidden) return;
       readScroll();
       elapsed += dt;
+      if (reducedMotion) {
+        world.updateStars(elapsed);
+        return;
+      }
       world.update(elapsed, dt, progress, pointer);
     };
 
@@ -153,7 +157,7 @@ export default function WorldCanvas({ reducedMotion = false }) {
     window.addEventListener("resize", world.resize);
     readScroll();
 
-    if (!reducedMotion) raf = requestAnimationFrame(frame);
+    raf = requestAnimationFrame(frame);
 
     return () => {
       window.removeEventListener("click",onTap);
