@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import WorldCanvas from "@/components/world/WorldCanvas";
 import SceneFallback from "@/components/world/SceneFallback";
 import WhatsAppFloat from "@/components/site/WhatsAppFloat";
+import AnalyticsConsent from "@/components/site/AnalyticsConsent";
 
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -52,6 +53,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <ScrollToTop />
+          <AnalyticsConsent />
           <PortfolioRoutes />
         </Router>
         <Toaster />

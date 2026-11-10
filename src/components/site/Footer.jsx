@@ -46,6 +46,15 @@ export default function Footer({ reduced }) {
             Built as an interactive portfolio · details editable
           </p>
         </div>
+        <div className="mt-4 border-t border-line/70 pt-4">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("portfolio:analytics-settings"))}
+            className="type-meta text-steel underline-offset-4 transition-colors hover:text-silver hover:underline"
+          >
+            Privacy choices
+          </button>
+        </div>
       </div>
     </footer>
   );
