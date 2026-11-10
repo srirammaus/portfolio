@@ -1,4 +1,4 @@
-const FALLBACK_MEASUREMENT_ID = "G-Y60KGX7CC2";
+const FALLBACK_MEASUREMENT_ID = "G-SXREJV4EX4";
 export const measurementId = import.meta.env.VITE_GOOGLE_MEASUREMENT_ID?.trim() || FALLBACK_MEASUREMENT_ID;
 const disableFlag = `ga-disable-${measurementId}`;
 
